@@ -1,0 +1,9 @@
+host = '192.168.3.14';	// hostname or IP address
+port = 9001;
+topic1 = 'falcon/+';// topic to subscribe to
+topic2 = 'arduino/out/+';
+topic3 = 'wemos/out/+';
+useTLS = false;
+username = null;
+password = null;
+cleansession = true;
