@@ -36,7 +36,7 @@ def main():
   global cad
   cad = pifacecad.PiFaceCAD()
 
-  broker = "127.0.0.1"
+  broker = "192.168.3.14"
   port = 1883
 
   mypid = os.getpid()
