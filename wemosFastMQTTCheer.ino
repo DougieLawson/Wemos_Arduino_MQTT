@@ -1,6 +1,5 @@
 #include "FastLED.h"
 #include <pixeltypes.h>
-
 #include <ESP8266WiFi.h>
 #include <PubSubClient.h>
 #include <WiFiManager.h>
@@ -24,26 +23,19 @@ PubSubClient mqttClient(wemosCL);
 
 const char* MQTT_broker = "iot.eclipse.org";
 const int led = LED_BUILTIN;
-
-// "black" must be first in both arrays
-// we're not going to set the Neopixel to "black"
 const String mqttColours[] = {
-  "black", "red",
-  "green", "blue",
-  "cyan", "white",
-  "warmwhite", "purple",
-  "magenta", "yellow",
-  "orange", "pink"
+  "red"    , "green"  , "blue"     ,
+  "cyan"   , "white"  , "purple"   ,
+  "magenta", "yellow" , "orange"   ,
+  "pink"   , "oldlace", "warmwhite"
 };
 
 // Keep the order the same as mqttColours[]
 const CRGB colourArray[] = {
-  CRGB::Black, CRGB::Red,
-  CRGB::Green, CRGB::Blue,
-  CRGB::Cyan, CRGB::White,
-  CRGB::AntiqueWhite, CRGB::Purple,
-  CRGB::Magenta, CRGB::Yellow,
-  CRGB::Orange, CRGB::Pink
+  0xFF0000, 0x00FF00, 0x0000FF,
+  0x00FFFF, 0xFFFFFF, 0x800080,
+  0xFF00FF, 0xFFFF00, 0xFFA500,
+  0xFFC0CB, 0xFDF5E6, 0xFDF5E6
 };
 
 void reconnect()
@@ -54,19 +46,21 @@ void reconnect()
     {
       mqttClient.subscribe("cheerlights");
     }
+
     else
     {
       //    Serial.print("Conn failed rc=");
       //    Serial.println(mqttClient.state());
       delay(1000);
     }
+
   }
+
 }
 
 void setup()
 {
   Serial.begin(115200);
-
   while (!Serial);
   WiFiManager wifiManager;
   wifiManager.setBreakAfterConfig(true);
@@ -79,12 +73,12 @@ void setup()
     delay(100);
     digitalWrite(led, 0);
   }
+
   WiFi.mode(WIFI_STA);
   WiFi.begin();
   while (WiFi.status() != WL_CONNECTED)
   {
     delay(500);
-
   }
 
   mqttClient.setServer(MQTT_broker, 1883);
@@ -103,8 +97,6 @@ void mqttCallBack(char* topic, byte* payload, unsigned int plLen)
   //Serial.println(mqttColour);
 
   int mqttColourMax = sizeof(mqttColours) / sizeof(mqttColours[0]);
-
-  // Loop starts at 1 as we're ignoring "black"
   for (int index = 1; index < mqttColourMax; index++)
   {
     if (mqttColour.equals(mqttColours[index]))
@@ -118,12 +110,15 @@ void mqttCallBack(char* topic, byte* payload, unsigned int plLen)
         //Serial.println(leds[indexO]);
         FastLED.show();
       }
+
       //Serial.print("0 ");
       //Serial.println(colourArray[index]);
       leds[0] = colourArray[index];
       FastLED.show();
     }
+
   }
+
 }
 
 void loop()
@@ -132,5 +127,6 @@ void loop()
   {
     reconnect();
   }
+
   mqttClient.loop();
 }
