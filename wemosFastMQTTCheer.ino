@@ -97,7 +97,7 @@ void mqttCallBack(char* topic, byte* payload, unsigned int plLen)
   //Serial.println(mqttColour);
 
   int mqttColourMax = sizeof(mqttColours) / sizeof(mqttColours[0]);
-  for (int index = 1; index < mqttColourMax; index++)
+  for (int index = 0; index < mqttColourMax; index++)
   {
     if (mqttColour.equals(mqttColours[index]))
     {
