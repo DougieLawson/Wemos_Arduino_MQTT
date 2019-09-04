@@ -24,10 +24,8 @@ PubSubClient mqttClient(wemosCL);
 
 String clientId;
 
-//const char* MQTT_broker = "iot.eclipse.org";
-//const char* MQTT_broker = "mqtt.thingspeak.com";
 const char* MQTT_broker = "mqtt.cheerlights.com";
-//const char* MQTT_pass = "J8Y99H9AE1BI8XTR";
+
 const int led = LED_BUILTIN;
 const String mqttColours[] = {
   "red"    , "green"  , "blue"     ,
@@ -102,7 +100,6 @@ void reconnect()
     {
       Serial.println("MQTT subscribe");
       mqttClient.subscribe("cheerlights");
-      //mqttClient.subscribe("channels/1417/subscribe/+");
     }
 
     else
